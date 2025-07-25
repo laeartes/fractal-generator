@@ -1,14 +1,18 @@
-import argparse
 import matplotlib.pyplot as plt
 import random
 import math
 import numpy as np
 import sys
 
-def print_how_to():
-    #placeholder for how to use the script
-    pass
-
+# === CONFIGURATION ===
+USE_RANDOM = False        # Set to True for random fractal, False for manual
+VERTICES = 3              # Used only if USE_RANDOM is False
+POINTS = 500000           # Used only if USE_RANDOM is False
+JUMP_FRACTION = 0.5       # Used only if USE_RANDOM is False
+SEED = 0                  # Used only if USE_RANDOM is False
+USE_DYNAMIC = False       # Enable dynamic jump fraction
+COLORMAP = "plasma"       # Matplotlib colormap name
+OUTPUT_PATH = "fractal_plot.png"  # Output file name
 
 def sigmoid(n):
     return 1 / (1 + math.exp(-n))
@@ -97,39 +101,25 @@ def randomPlot():
     )
     plotas(points, vertices, cmap_name=cmap_name)
 
-def parse_args():
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("-v", "--vertices", type=int, help="Number of polygon corners", default=5)
-    parser.add_argument("-p", "--points", type=int, help="Number of points", default=500000)
-    parser.add_argument("-j", "--jump", type=float, help="Jump fraction", default=0.5)
-    parser.add_argument("-s", "--seed", type=int, help="Factor seed", default=0)
-    parser.add_argument("-d", "--dynamic", action="store_true", help="Enable dynamic jump fraction")
-    parser.add_argument("-r", "--random", action="store_true", help="Generate random fractal")
-    parser.add_argument("-c", "--cmap", type=str, help="Colormap to use", default="plasma")
-    parser.add_argument("-o", "--output", type=str, help="Output image path", default="fractal_plot.png")
-    return parser.parse_args()
-
 if __name__ == "__main__":
-    args = parse_args()
-
     try:
-        if args.random:
+        if USE_RANDOM:
             randomPlot()
         else:
-            print(f"[Manual] Vertices: {args.vertices}, Points: {args.points}, "
-                  f"Jump Fraction: {args.jump}, Seed: {args.seed}, "
-                  f"Dynamic: {args.dynamic}, Colormap: {args.cmap}")
-            
+            print(f"[Manual] Vertices: {VERTICES}, Points: {POINTS}, "
+                  f"Jump Fraction: {JUMP_FRACTION}, Seed: {SEED}, "
+                  f"Dynamic: {USE_DYNAMIC}, Colormap: {COLORMAP}")
+
             points, vertices = kodas(
-                vertex_count=args.vertices,
-                num_points=args.points,
-                jump_fraction=args.jump,
-                factorSeed=args.seed,
-                use_dynamic=args.dynamic
+                vertex_count=VERTICES,
+                num_points=POINTS,
+                jump_fraction=JUMP_FRACTION,
+                factorSeed=SEED,
+                use_dynamic=USE_DYNAMIC
             )
 
-            plotas(points, vertices, cmap_name=args.cmap, save_path=args.output)
-            print(f"Saved to {args.output}")
+            plotas(points, vertices, cmap_name=COLORMAP, save_path=OUTPUT_PATH)
+            print(f"Saved to {OUTPUT_PATH}")
     except Exception as e:
         print(f"ERROR: {e}")
         print("UNEXPECTED ERROR, MAYBE TRY OTHER PARAMETERS")
