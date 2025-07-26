@@ -5,12 +5,12 @@ import numpy as np
 import sys
 
 # === CONFIGURATION ===
-USE_RANDOM = False        # Set to True for random fractal, False for manual
+USE_RANDOM = True        # Set to True for random fractal, False for manual
 VERTICES = 3              # Used only if USE_RANDOM is False
 POINTS = 500000           # Used only if USE_RANDOM is False
-JUMP_FRACTION = 0.5       # Used only if USE_RANDOM is False
+JUMP_FRACTION = 1       # Used only if USE_RANDOM is False
 SEED = 0                  # Used only if USE_RANDOM is False
-USE_DYNAMIC = False       # Enable dynamic jump fraction
+USE_DYNAMIC = True       # Enable dynamic jump fraction
 COLORMAP = "plasma"       # Matplotlib colormap name
 OUTPUT_PATH = "fractal_plot.png"  # Output file name
 
@@ -21,7 +21,7 @@ def generateJumpFraction(distance, f, sign, rng):
     if rng == 0:
         return abs(math.tanh(sigmoid(distance * sign))) + 1
     elif rng == 1:
-        return math.sqrt(distance)
+        return abs(math.sqrt(abs(distance)) - 2)
     elif rng == 2:
         return math.tanh(distance) + 1
     elif rng == 3:
@@ -84,7 +84,7 @@ def plotas(points, vertices, cmap_name="plasma", point_size=0.2, save_path="frac
 
 def randomPlot():
     vertex_count = random.randint(3, 10)
-    num_points = random.randint(100000, 2000000)
+    num_points = random.randint(100000, 1000000)
     jump_fraction = random.uniform(0.1, 2.0)
     factorSeed = random.randint(0, 5)
     cmap_name = random.choice(plt.colormaps())
